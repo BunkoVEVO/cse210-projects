@@ -1,0 +1,73 @@
+Abstraction – Design Activity (Journal Program)
+
+Program Overview
+The Journal Program is designed to help users consistently record daily thoughts by providing random prompts and saving responses. The program allows users to write entries, view past entries, save them to a file, and load them later. It runs in a menu loop until the user chooses to quit.
+
+Program Behavior
+
+* User selects options from a menu (write, display, save, load, quit)
+* Program displays prompts and journal entries
+* User provides text input, mood rating, and filenames
+* Program ends when the quit option is selected
+
+Classes Identified
+
+1. Program
+   * Controls program flow
+   * Displays menu and handles user input
+   * Calls methods from other classes
+
+2. Journal
+   * Stores a list of journal entries
+   * Adds entries
+   * Displays entries
+   * Saves entries to a file
+   * Loads entries from a file
+
+3. Entry
+   * Represents a single journal entry
+   * Stores date, prompt, response, and mood
+   * Displays entry data
+   * Converts entry data to and from file format
+
+4. PromptGenerator
+   * Stores journal prompts
+   * Returns a random prompt when requested
+
+Class Behaviors (Methods)
+
+* Program: Main()
+* Journal: AddEntry(), DisplayEntries(), SaveToFile(), LoadFromFile()
+* Entry: Display(), ToFileString(), FromFileString()
+* PromptGenerator: GetRandomPrompt()
+
+Class Attributes
+Journal:
+
+* List<Entry> entries
+
+Entry:
+
+* string Date
+* string Prompt
+* string Response
+* string Mood
+
+PromptGenerator:
+
+* List<string> prompts
+* Random random
+
+Abstraction in the Design
+Abstraction is used by separating responsibilities into different classes. The Program class does not manage file storage or entry formatting. The Journal class hides how entries are stored and saved. The Entry class hides how entry data is displayed and formatted. The PromptGenerator class hides how prompts are selected. This makes the program easier to understand, modify, and expand.
+
+Program Flow
+
+1. Program starts
+2. Menu is displayed
+3. User selects an option
+4. Appropriate class methods are called
+5. Program repeats until the user quits
+
+Conclusion
+This design uses abstraction to keep each class focused on a single responsibility. This makes the program organized, flexible, and easy to maintain.
