@@ -140,9 +140,66 @@ ScriptureMemorizer Class:
 
 ---
 
+UML Class Diagram (PlantUML)
+
+The following class diagram defines all classes needed for this assignment using proper UML formatting and naming conventions. This diagram was created using PlantUML.
+
+@startuml
+class Scripture {
+
+* _reference : Reference
+* _words : List<Word>
+
+- Scripture(reference : Reference, text : string)
+- Display() : string
+- HideRandomWords(count : int) : void
+- IsCompletelyHidden() : bool
+  }
+
+class Reference {
+
+* _book : string
+* _chapter : int
+* _startVerse : int
+* _endVerse : int
+
+- Reference(book : string, chapter : int, verse : int)
+- Reference(book : string, chapter : int, startVerse : int, endVerse : int)
+- GetDisplayText() : string
+  }
+
+class Word {
+
+* _text : string
+* _isHidden : bool
+
+- Word(text : string)
+- Hide() : void
+- IsHidden() : bool
+- GetDisplayText() : string
+  }
+
+Scripture "1" *-- "1" Reference
+Scripture "1" *-- "*" Word
+@enduml
+
+---
+
+Interaction Description
+
+1. The program begins by creating a Reference object containing the scripture book, chapter, and verse information.
+2. A Scripture object is created using the Reference object and the full scripture text.
+3. The Scripture constructor splits the text into individual words and stores them as Word objects.
+4. The program repeatedly displays the scripture by calling Scripture.Display().
+5. After each user interaction, Scripture.HideRandomWords() is called to hide additional words.
+6. Each Word object controls its own hidden state, ensuring encapsulation.
+7. The program checks Scripture.IsCompletelyHidden() to determine when to end.
+
+---
+
 Conclusion
 
-This design applies encapsulation by giving each class a single, well-defined responsibility. The structure allows the program to be easily modified or extended without impacting unrelated components. Adjustments to this design during implementation are expected and acceptable.
+This design applies encapsulation by giving each class a single, well-defined responsibility. The structure follows UML standards and clearly defines behaviors, attributes, constructors, and interactions. The design supports easy modification and extension while maintaining clean separation of concerns.
 
 Next Meeting Lead Student:
 To be determined by the team.
