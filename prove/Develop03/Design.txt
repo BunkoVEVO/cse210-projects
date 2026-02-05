@@ -1,0 +1,148 @@
+Encapsulation – Design Activity
+Project: Scripture Memorizer
+
+Purpose
+This document outlines the design of the Scripture Memorizer program. This is a design-only activity focused on planning classes, responsibilities, and structure before implementation.
+
+---
+
+Discussion of Preparation Learning Activity
+
+The most challenging part of the learning activity was understanding how encapsulation separates responsibilities between classes. Determining which class should handle specific logic required discussion, especially when deciding what data should be hidden versus exposed through methods. Once responsibilities were clearly defined, planning the class behaviors became more straightforward.
+
+---
+
+Program Specification Review
+
+What does the program do?
+The program helps users memorize scriptures by gradually hiding words from the scripture text while still displaying the reference.
+
+User Inputs
+
+* Press Enter to continue hiding words
+* Type "quit" to end the program
+
+Program Output
+
+* Displays the scripture reference
+* Displays the scripture text with some words hidden
+* Updates the display each iteration
+
+How does the program end?
+
+* When the user types "quit"
+* When all words in the scripture are hidden
+
+---
+
+Identified Classes and Responsibilities
+
+Class: Scripture
+Responsibility:
+
+* Manages the scripture text and controls word hiding behavior
+
+Class: Reference
+Responsibility:
+
+* Stores and formats scripture reference information
+
+Class: Word
+Responsibility:
+
+* Represents a single word and tracks whether it is hidden
+
+Class: ScriptureMemorizer (or Program)
+Responsibility:
+
+* Controls program flow and user interaction
+
+---
+
+Class Behaviors (Methods)
+
+Scripture Class:
+
+* Display(): Returns the scripture text with hidden words masked
+* HideRandomWords(int count): Hides a specified number of visible words
+* IsCompletelyHidden(): Returns true if all words are hidden
+
+Reference Class:
+
+* GetDisplayText(): Returns the formatted scripture reference
+
+Word Class:
+
+* Hide(): Marks the word as hidden
+* IsHidden(): Returns whether the word is hidden
+* GetDisplayText(): Returns the word text or a placeholder if hidden
+
+ScriptureMemorizer Class:
+
+* Run(): Executes the main program loop
+* PromptUser(): Reads user input
+* ClearScreen(): Clears the console display
+
+---
+
+Class Attributes
+
+Scripture Class:
+
+* Reference _reference
+* List<Word> _words
+
+Reference Class:
+
+* string _book
+* int _chapter
+* int _startVerse
+* int _endVerse
+
+Word Class:
+
+* string _text
+* bool _isHidden
+
+ScriptureMemorizer Class:
+
+* Scripture _scripture
+
+---
+
+Constructors
+
+Reference Class:
+
+* Reference(string book, int chapter, int verse)
+* Reference(string book, int chapter, int startVerse, int endVerse)
+
+Word Class:
+
+* Word(string text)
+
+  * Initializes _isHidden to false
+
+Scripture Class:
+
+* Scripture(Reference reference, string text)
+
+  * Splits the text into individual words
+  * Creates Word objects
+  * Stores words in a list
+
+ScriptureMemorizer Class:
+
+* ScriptureMemorizer()
+
+  * Creates the Scripture instance
+  * Initializes the program state
+
+---
+
+Conclusion
+
+This design applies encapsulation by giving each class a single, well-defined responsibility. The structure allows the program to be easily modified or extended without impacting unrelated components. Adjustments to this design during implementation are expected and acceptable.
+
+Next Meeting Lead Student:
+To be determined by the team.
