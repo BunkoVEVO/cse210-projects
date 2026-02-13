@@ -1,35 +1,37 @@
-public class Entry
+using System;
+
+public class Entry 
 {
-    public string Date { get; set; }
-    public string Prompt { get; set; }
-    public string Response { get; set; }
-    public string Mood { get; set; }
+    public string _date;
+    public string _prompt;
+    public string _response;
 
-    public Entry(string date, string prompt, string response, string mood)
+    public void GenerateDate()
     {
-        Date = date;
-        Prompt = prompt;
-        Response = response;
-        Mood = mood;
+        DateTime theCurrentTime = DateTime.Now;
+        _date = theCurrentTime.ToShortDateString();
     }
 
-    public void Display()
+    public void GeneratePrompt()
     {
-        Console.WriteLine($"Date: {Date}");
-        Console.WriteLine($"Prompt: {Prompt}");
-        Console.WriteLine($"Response: {Response}");
-        Console.WriteLine($"Mood: {Mood}");
-        Console.WriteLine(new string('-', 30));
+        List<string> prompts = new List<string>()
+        {
+        "Who was the most interesting person I interacted with today?",
+        "What was the best part of my day?",
+        "How did I see the hand of the Lord in my life today?",
+        "What was the strongest emotion I felt today?",
+        "If I had one thing I could do over today, what would it be?",
+        };
+
+        Random rand = new Random();
+        int randomIndex = rand.Next(prompts.Count);
+        _prompt = prompts[randomIndex];
+        Console.WriteLine(_prompt);
     }
 
-    public string ToFileString()
+    public void GetResponse()
     {
-        return $"{Date}~|~{Prompt}~|~{Response}~|~{Mood}";
-    }
-
-    public static Entry FromFileString(string line)
-    {
-        string[] parts = line.Split("~|~");
-        return new Entry(parts[0], parts[1], parts[2], parts[3]);
+        Console.Write("> ");
+        _response = Console.ReadLine();
     }
 }

@@ -1,58 +1,77 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 
 public class Journal
 {
-    private List<Entry> _entries = new List<Entry>();
 
-    public void AddEntry(Entry entry)
+    public List<Entry> _entries = new List<Entry>();
+    public void NewEntry()
     {
-        _entries.Add(entry);
+        Entry userEntry = new Entry();
+        userEntry.GenerateDate();
+        userEntry.GeneratePrompt();
+        userEntry.GetResponse();
+        _entries.Add(userEntry);
     }
 
     public void DisplayEntries()
     {
-        if (_entries.Count == 0)
-        {
-            Console.WriteLine("Journal is empty.");
-            return;
-        }
-
         foreach (Entry entry in _entries)
         {
-            entry.Display();
+            Console.WriteLine($"Date: {entry._date}");
+            Console.WriteLine($"Prompt: {entry._prompt}");
+            Console.WriteLine($"{entry._response}");
+            Console.WriteLine();
         }
     }
 
-    public void SaveToFile(string filename)
+    public void LoadEntries(string filename)
     {
-        using (StreamWriter writer = new StreamWriter(filename))
+        if (filename.EndsWith(".csv"))
         {
-            foreach (Entry entry in _entries)
+            string[] lines = System.IO.File.ReadAllLines(filename);
+            foreach (string line in lines)
             {
-                writer.WriteLine(entry.ToFileString());
+                string[] parts = line.Split(",");
+                string date = parts[0];
+                string prompt = parts[1];
+                string response = parts[2];
+                Console.WriteLine($"Date: {date}");
+                Console.WriteLine($"Prompt: {prompt}");
+                Console.WriteLine($"{response}");
+                Console.WriteLine();
             }
         }
-        Console.WriteLine("Journal saved successfully.");
+        else
+        {
+            using (StreamReader reader = new StreamReader(filename))
+            {
+                String journalEntries = reader.ReadToEnd();
+                Console.Write(journalEntries);
+            }
+        }
     }
 
-    public void LoadFromFile(string filename)
+    public void SaveEntries(string filename)
     {
-        _entries.Clear();
-
-        if (!File.Exists(filename))
+        using (StreamWriter outputFile = new StreamWriter(filename, true))
         {
-            Console.WriteLine("File not found.");
-            return;
+            if (filename.EndsWith(".csv"))
+            {
+                foreach (Entry entry in _entries)
+                {
+                    outputFile.WriteLine($"{entry._date},{entry._prompt},{entry._response}");
+                }
+            }
+            else
+            {
+                foreach (Entry entry in _entries)
+                {
+                    outputFile.WriteLine($"Date:{entry._date},{entry._prompt},{entry._response}");
+                    outputFile.WriteLine($"Prompt:{entry._prompt}");
+                    outputFile.WriteLine($"{entry._response}");
+                    outputFile.WriteLine();
+                }
+            }
         }
-
-        string[] lines = File.ReadAllLines(filename);
-        foreach (string line in lines)
-        {
-            _entries.Add(Entry.FromFileString(line));
-        }
-
-        Console.WriteLine("Journal loaded successfully.");
     }
 }
