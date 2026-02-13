@@ -1,205 +1,97 @@
-Encapsulation – Design Activity
+Encapsulation Design Document
 Project: Scripture Memorizer
 
 Purpose
-This document outlines the design of the Scripture Memorizer program. This is a design-only activity focused on planning classes, responsibilities, and structure before implementation.
+This document describes the design of the Scripture Memorizer program. The program helps users memorize scripture by gradually hiding random words from the text until all words are hidden or the user chooses to quit.
 
----
+Program Overview
+The program displays a scripture reference and its corresponding scripture text. Each time the user presses Enter, three visible words are randomly selected and replaced with underscores. The process repeats until the user types "quit" or no visible words remain. At the end, the program displays the final version of the scripture and prints “Good job!”.
 
-Discussion of Preparation Learning Activity
+User Input
 
-The most challenging part of the learning activity was understanding how encapsulation separates responsibilities between classes. Determining which class should handle specific logic required discussion, especially when deciding what data should be hidden versus exposed through methods. Once responsibilities were clearly defined, planning the class behaviors became more straightforward.
-
----
-
-Program Specification Review
-
-What does the program do?
-The program helps users memorize scriptures by gradually hiding words from the scripture text while still displaying the reference.
-
-User Inputs
-
-* Press Enter to continue hiding words
-* Type "quit" to end the program
+* Press Enter to hide additional words
+* Type "quit" to exit the program
 
 Program Output
 
-* Displays the scripture reference
-* Displays the scripture text with some words hidden
-* Updates the display each iteration
+* Displays the formatted scripture reference
+* Displays the scripture text with some words replaced by underscores
+* Displays a completion message when finished
 
-How does the program end?
+Classes and Responsibilities
 
-* When the user types "quit"
-* When all words in the scripture are hidden
+Program
+Responsibility: Controls overall execution and user interaction.
 
----
+* Creates Reference, Scripture, and ScriptureMemorizer objects
+* Manages the main loop
+* Clears the console and displays output
+* Ends the program when conditions are met
 
-Identified Classes and Responsibilities
-
-Class: Scripture
-Responsibility:
-
-* Manages the scripture text and controls word hiding behavior
-
-Class: Reference
-Responsibility:
-
-* Stores and formats scripture reference information
-
-Class: Word
-Responsibility:
-
-* Represents a single word and tracks whether it is hidden
-
-Class: ScriptureMemorizer (or Program)
-Responsibility:
-
-* Controls program flow and user interaction
-
----
-
-Class Behaviors (Methods)
-
-Scripture Class:
-
-* Display(): Returns the scripture text with hidden words masked
-* HideRandomWords(int count): Hides a specified number of visible words
-* IsCompletelyHidden(): Returns true if all words are hidden
-
-Reference Class:
-
-* GetDisplayText(): Returns the formatted scripture reference
-
-Word Class:
-
-* Hide(): Marks the word as hidden
-* IsHidden(): Returns whether the word is hidden
-* GetDisplayText(): Returns the word text or a placeholder if hidden
-
-ScriptureMemorizer Class:
-
-* Run(): Executes the main program loop
-* PromptUser(): Reads user input
-* ClearScreen(): Clears the console display
-
----
-
-Class Attributes
-
-Scripture Class:
-
-* Reference _reference
-* List<Word> _words
-
-Reference Class:
-
-* string _book
-* int _chapter
-* int _startVerse
-* int _endVerse
-
-Word Class:
-
-* string _text
-* bool _isHidden
-
-ScriptureMemorizer Class:
-
-* Scripture _scripture
-
----
-
-Constructors
-
-Reference Class:
-
-* Reference(string book, int chapter, int verse)
-* Reference(string book, int chapter, int startVerse, int endVerse)
-
-Word Class:
-
-* Word(string text)
-
-  * Initializes _isHidden to false
-
-Scripture Class:
-
-* Scripture(Reference reference, string text)
-
-  * Splits the text into individual words
-  * Creates Word objects
-  * Stores words in a list
-
-ScriptureMemorizer Class:
-
-* ScriptureMemorizer()
-
-  * Creates the Scripture instance
-  * Initializes the program state
-
----
-
-UML Class Diagram (PlantUML)
-
-The following class diagram defines all classes needed for this assignment using proper UML formatting and naming conventions. This diagram was created using PlantUML.
-
-@startuml
-class Scripture {
-
-* _reference : Reference
-* _words : List<Word>
-
-- Scripture(reference : Reference, text : string)
-- Display() : string
-- HideRandomWords(count : int) : void
-- IsCompletelyHidden() : bool
-  }
-
-class Reference {
+Reference
+Responsibility: Stores and formats scripture reference information.
+Private Attributes:
 
 * _book : string
-* _chapter : int
-* _startVerse : int
-* _endVerse : int
+* _chapter : string
+* _verse : string
+  Public Methods:
+* Reference(string book, string chapter, string verse)
+* toString() : string
+  The toString() method returns the formatted reference in the form "Book Chapter:Verse".
 
-- Reference(book : string, chapter : int, verse : int)
-- Reference(book : string, chapter : int, startVerse : int, endVerse : int)
-- GetDisplayText() : string
-  }
+Scripture
+Responsibility: Stores scripture text and maintains its associated reference.
+Private Attributes:
 
-class Word {
+* _scriptureText : string
+* _scriptureReference : Reference
+  Public Methods:
+* Scripture(Reference scriptureReference, string scriptureText)
+* toString() : string
+  The toString() method returns the full scripture text.
 
-* _text : string
-* _isHidden : bool
+ScriptureMemorizer
+Responsibility: Manages word removal logic and tracks memorization progress.
+Private Attributes:
 
-- Word(text : string)
-- Hide() : void
-- IsHidden() : bool
-- GetDisplayText() : string
-  }
+* _scripture : Scripture
+* _scriptureTextList : List<string>
+* _totalWordsRemoved : int
+  Public Methods:
+* ScriptureMemorizer(Scripture scripture)
+* removeWordsFromText() : void
+* toString() : string
+* hasWordsLeft() : bool
+  Private Methods:
+* convertTextToList() : void
 
-Scripture "1" *-- "1" Reference
-Scripture "1" *-- "*" Word
-@enduml
+Behavior Description
 
----
+When a ScriptureMemorizer object is created, it converts the scripture text into a list of individual words using the convertTextToList() method.
 
-Interaction Description
+The removeWordsFromText() method randomly selects three visible words and replaces them with underscores. Words that are already hidden are skipped. The method tracks the total number of words removed to prevent errors when only a few words remain.
 
-1. The program begins by creating a Reference object containing the scripture book, chapter, and verse information.
-2. A Scripture object is created using the Reference object and the full scripture text.
-3. The Scripture constructor splits the text into individual words and stores them as Word objects.
-4. The program repeatedly displays the scripture by calling Scripture.Display().
-5. After each user interaction, Scripture.HideRandomWords() is called to hide additional words.
-6. Each Word object controls its own hidden state, ensuring encapsulation.
-7. The program checks Scripture.IsCompletelyHidden() to determine when to end.
+The hasWordsLeft() method checks the list to determine whether any words remain visible. If all words are hidden, the method returns false.
 
----
+The toString() method joins the word list back into a single string for display.
+
+Program Flow
+
+1. The Program class creates a Reference object.
+2. A Scripture object is created using the Reference and scripture text.
+3. A ScriptureMemorizer object is created using the Scripture.
+4. The program enters a loop that continues while the user has not typed "quit" and words remain visible.
+5. The console is cleared.
+6. The reference and current scripture state are displayed.
+7. The user presses Enter or types "quit".
+8. If not quitting, removeWordsFromText() is called to hide additional words.
+9. When the loop ends, the final scripture state is displayed and the program prints “Good job!”.
+
+Encapsulation
+
+Encapsulation is demonstrated by keeping all data fields private and exposing functionality through public methods. The Program class does not directly modify the word list. Instead, it interacts with the ScriptureMemorizer class through its public methods. Each class has a clear and specific responsibility, which improves organization, readability, and maintainability.
 
 Conclusion
 
-This design applies encapsulation by giving each class a single, well-defined responsibility. The structure follows UML standards and clearly defines behaviors, attributes, constructors, and interactions. The design supports easy modification and extension while maintaining clean separation of concerns.
-
-Next Meeting Lead Student:
-To be determined by the team.
+This design separates responsibilities across four classes and protects internal data using private attributes. The structure follows object-oriented design principles and demonstrates encapsulation by controlling access to data and behavior through well-defined methods.
