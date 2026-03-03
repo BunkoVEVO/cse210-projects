@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 public class ReflectingActivity : Activity
 {
     private List<string> _prompts;
     private List<string> _questions;
+    private static Random _rand = new Random();
+    private static List<string> _usedPrompts = new List<string>();
 
     public ReflectingActivity() : base()
     {
@@ -19,7 +22,7 @@ public class ReflectingActivity : Activity
             "--- Think of a time when you did something truly selfless. ---"
         };
 
-        _questions = new List<string> 
+        _questions = new List<string>
         {
             "Why was this experience meaningful to you?",
             "Have you ever done anything like this before?",
@@ -41,45 +44,57 @@ public class ReflectingActivity : Activity
         RunActivityParentEnd();
     }
 
-    public void DisplayPrompt()
+    private void DisplayPrompt()
     {
         Console.WriteLine("Consider the following: ");
         Console.WriteLine();
 
-        int randomIndex = new Random().Next(0, _prompts.Count());
-        Console.WriteLine(_prompts[randomIndex]);
-        Console.WriteLine();
+        // Avoid repeating prompts
+        var availablePrompts = new List<string>();
+        foreach (var prompt in _prompts)
+        {
+            if (!_usedPrompts.Contains(prompt))
+                availablePrompts.Add(prompt);
+        }
 
+        if (availablePrompts.Count == 0)
+            _usedPrompts.Clear();
+
+        int randomIndex = _rand.Next(availablePrompts.Count);
+        string selectedPrompt = availablePrompts[randomIndex];
+        _usedPrompts.Add(selectedPrompt);
+
+        Console.WriteLine(selectedPrompt);
+        Console.WriteLine();
         Console.WriteLine("When you have something in mind, press enter to continue.");
         Console.ReadLine();
-    }    
+    }
 
-    public void DisplayQuestions()
+    private void DisplayQuestions()
     {
         List<int> indexes = new List<int>();
 
         for (int i = 0; i < 4; i++)
         {
-            int randomInt = new Random().Next(0, _questions.Count());
+            int randomInt = _rand.Next(_questions.Count);
             while (indexes.Contains(randomInt))
             {
-                randomInt = new Random().Next(0, _questions.Count());
+                randomInt = _rand.Next(_questions.Count);
             }
             indexes.Add(randomInt);
         }
+
         Console.Clear();
         Console.WriteLine("Now ponder on each of the following questions as they relate to this experience.");
         Console.WriteLine();
         DisplayCountdown(5);
 
+        int sessionLength = GetUserSessionLengthInput();
         foreach (int index in indexes)
         {
             Console.Write(_questions[index]);
-            DisplaySpinner((GetUserSessionLengthInput() / indexes.Count()));
+            DisplaySpinner(sessionLength / indexes.Count);
             Console.WriteLine();
         }
-        
     }
-
-        
 }

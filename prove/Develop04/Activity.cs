@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 
 public class Activity
 {
@@ -7,19 +8,20 @@ public class Activity
     private string _endingMessage;
     private string _activityDescription;
     private string _activityName;
-    static int _spinnerCounter = 0;
-    static int _userSessionLengthInput = 0;
-
+    private static int _spinnerCounter = 0;
+    private int _userSessionLengthInput = 0;
 
     public Activity()
     {
-        _spinnerCounter = _userSessionLengthInput = 0;
+        _spinnerCounter = 0;
+        _userSessionLengthInput = 0;
     }
 
     public void SetActivityName(string activityName)
     {
         _activityName = activityName;
     }
+
     public void SetActivityDescription(string activityDescription)
     {
         _activityDescription = activityDescription;
@@ -29,6 +31,7 @@ public class Activity
     {
         return _userSessionLengthInput;
     }
+
     public void DisplayStartingtMessage()
     {
         _startingMessage = $"Welcome to the {_activityName}.";
@@ -41,9 +44,10 @@ public class Activity
         Console.WriteLine(_activityDescription);
         Console.WriteLine();
     }
+
     public void DisplayEndingMessage()
     {
-        _endingMessage = $"You have complete {_userSessionLengthInput} seconds of the {_activityName}.";
+        _endingMessage = $"You have completed {_userSessionLengthInput} seconds of the {_activityName}.";
 
         Console.WriteLine();
         Console.WriteLine("Well done!");
@@ -111,5 +115,4 @@ public class Activity
     {
         DisplayEndingMessage();
     }
-
 }
