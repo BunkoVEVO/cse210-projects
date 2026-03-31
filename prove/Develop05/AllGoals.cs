@@ -4,8 +4,8 @@ using System.Collections.Generic;
 public class AllGoals
 {
     public List<Goal> allGoals = new List<Goal>();
-    public int totalPoints;
-    public string fileName;
+    public int totalPoints = 0;
+    public string fileName = "";
 
     public void addGoal(Goal goal)
     {
@@ -14,7 +14,7 @@ public class AllGoals
 
     public void DisplayPoints()
     {
-        Console.WriteLine($"Total Points: {totalPoints}");
+        Console.WriteLine("Total Points: " + totalPoints);
     }
 
     public void DisplayGoals()
@@ -26,8 +26,12 @@ public class AllGoals
         }
 
         Console.WriteLine("Your goals:");
-        foreach (Goal goal in allGoals)
-            Console.WriteLine($"{allGoals.IndexOf(goal) + 1}. {goal}");
+
+        for (int i = 0; i < allGoals.Count; i++)
+        {
+            Console.WriteLine((i + 1) + ". " + allGoals[i].ToString());
+        }
+
         Console.WriteLine();
     }
 
@@ -44,8 +48,11 @@ public class AllGoals
 
         List<string> saveGoals = new List<string>();
         saveGoals.Add(totalPoints.ToString());
-        foreach (Goal goal in allGoals)
-            saveGoals.Add(goal.ToCSVRecord());
+
+        for (int i = 0; i < allGoals.Count; i++)
+        {
+            saveGoals.Add(allGoals[i].ToCSVRecord());
+        }
 
         SaveLoadCSV.SaveToCSV(saveGoals, fileName);
         Console.WriteLine("Goals saved.");
@@ -57,29 +64,42 @@ public class AllGoals
         fileName = Console.ReadLine();
 
         List<string> fileGoals = SaveLoadCSV.LoadFromCSV(fileName);
+
         allGoals.Clear();
         totalPoints = 0;
 
-        for (int i = 1; i < fileGoals.Count; i++) // skip total points line
+        for (int i = 1; i < fileGoals.Count; i++)
         {
             string[] parts = fileGoals[i].Split('|');
             string type = parts[0];
+
             Goal goal = null;
 
             if (type == "Simple")
+            {
                 goal = new SimpleGoal(parts[1], parts[2], int.Parse(parts[3]), bool.Parse(parts[4]));
+            }
             else if (type == "Eternal")
+            {
                 goal = new EternalGoal(parts[1], parts[2], int.Parse(parts[3]), int.Parse(parts[4]));
+            }
             else if (type == "CheckList")
-                goal = new CheckListGoal(parts[1], parts[2], int.Parse(parts[3]), int.Parse(parts[4]),
-                                          int.Parse(parts[5]), int.Parse(parts[6]), bool.Parse(parts[7]));
+            {
+                goal = new CheckListGoal(parts[1], parts[2], int.Parse(parts[3]),
+                    int.Parse(parts[4]), int.Parse(parts[5]),
+                    int.Parse(parts[6]), bool.Parse(parts[7]));
+            }
 
             if (goal != null)
+            {
                 allGoals.Add(goal);
+            }
         }
 
-        foreach (Goal g in allGoals)
-            totalPoints += g.GetGoalPoints();
+        for (int i = 0; i < allGoals.Count; i++)
+        {
+            totalPoints = totalPoints + allGoals[i].GetGoalPoints();
+        }
 
         Console.WriteLine("Goals loaded.");
     }
@@ -93,18 +113,27 @@ public class AllGoals
         }
 
         Console.WriteLine("Goals:");
-        foreach (Goal g in allGoals)
-            Console.WriteLine($"{allGoals.IndexOf(g) + 1}. {g}");
+
+        for (int i = 0; i < allGoals.Count; i++)
+        {
+            Console.WriteLine((i + 1) + ". " + allGoals[i].ToString());
+        }
 
         Console.Write("Which goal did you complete? ");
+
         int choice;
+
         while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > allGoals.Count)
+        {
             Console.WriteLine("Please select a valid goal number:");
+        }
 
-        choice--; // convert to index
+        choice = choice - 1;
+
         int pointsEarned = allGoals[choice].RecordEvent();
-        totalPoints += pointsEarned;
+        totalPoints = totalPoints + pointsEarned;
 
-        Console.WriteLine($"Total Points: {totalPoints}\n");
+        Console.WriteLine("Total Points: " + totalPoints);
+        Console.WriteLine();
     }
 }

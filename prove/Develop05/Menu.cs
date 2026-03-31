@@ -1,51 +1,44 @@
 using System;
-
+using System.Collections.Generic;
 
 public class Menu
 {
-    private List<string> _mainMenu;
-    private List<string> _createGoalMenu;
+    public List<string> mainMenu = new List<string>();
+    public List<string> createGoalMenu = new List<string>();
 
     public Menu()
     {
-        _mainMenu = new List<string>
-        {
-            "Menu Options:",
-            "  1. Create New Goal",
-            "  2. List Goals",
-            "  3. Save Goals",
-            "  4. Load Goals",
-            "  5. Record Event",
-            "  6. Quit"
-        };
+        mainMenu.Add("Menu Options:");
+        mainMenu.Add("  1. Create New Goal");
+        mainMenu.Add("  2. List Goals");
+        mainMenu.Add("  3. Save Goals");
+        mainMenu.Add("  4. Load Goals");
+        mainMenu.Add("  5. Record Event");
+        mainMenu.Add("  6. Quit");
 
-        _createGoalMenu = new List<string>
-        {
-            "The types of Goals are:",
-            "  1. Simple Goal",
-            "  2. Eternal Goal",
-            "  3. CheckList Goal"
-        };
+        createGoalMenu.Add("The types of Goals are:");
+        createGoalMenu.Add("  1. Simple Goal");
+        createGoalMenu.Add("  2. Eternal Goal");
+        createGoalMenu.Add("  3. CheckList Goal");
     }
 
     public void DisplayMainMenu()
     {
-        foreach (string menuItem in _mainMenu)
+        for (int i = 0; i < mainMenu.Count; i++)
         {
-            Console.WriteLine(menuItem);
+            Console.WriteLine(mainMenu[i]);
         }
 
         Console.Write("Select a choice: ");
-       
     }
 
     public void DisplayNewGoalMenu()
     {
-        foreach (string menuItem in _createGoalMenu)
+        for (int i = 0; i < createGoalMenu.Count; i++)
         {
-            Console.WriteLine(menuItem);
+            Console.WriteLine(createGoalMenu[i]);
         }
+
         Console.Write("Select a choice from the menu: ");
     }
-
 }
