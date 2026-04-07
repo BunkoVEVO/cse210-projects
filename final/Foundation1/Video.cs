@@ -12,13 +12,14 @@ public class Video
         Console.WriteLine($"Title: {_title}");
         Console.WriteLine($"Author: {_author}");
         Console.WriteLine($"Length: {_length} seconds");
-        int commentCount = _commentList.Count();
+
+        int commentCount = _commentList.Count; // FIXED
+
         Console.WriteLine($"Comments ({commentCount}):");
 
         foreach (Comment comment in _commentList)
         {
             comment.DisplayComment();
         }
-
     }
 }
