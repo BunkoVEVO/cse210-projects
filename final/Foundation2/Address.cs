@@ -2,12 +2,12 @@ using System;
 
 public class Address
 {
-    private string _streetAddress {get; set;}
-    private string _city {get; set;}
-    private string _state {get; set;}
-    private string _country {get; set;}
+    public string _streetAddress;
+    public string _city;
+    public string _state;
+    public string _country;
 
-    public Address (string streetAddress, string city, string state, string country)
+    public Address(string streetAddress, string city, string state, string country)
     {
         _streetAddress = streetAddress;
         _city = city;
@@ -19,6 +19,7 @@ public class Address
     {
         _country = country;
     }
+
     public string GetCountry()
     {
         return _country;

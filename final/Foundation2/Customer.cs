@@ -2,27 +2,28 @@ using System;
 
 public class Customer
 {
-    private string _customerName {get; set;}
-    private Address _address {get; set;}
+    public string _customerName;
+    public Address _address;
 
-    public Customer (string customerName, Address address)
+    public Customer(string customerName, Address address)
     {
         _customerName = customerName;
         _address = address;
     }
 
-
     public double GetShippingCost()
     {
         double shippingCost;
+
         if (_address.GetCountry() == "USA")
         {
             shippingCost = 5;
         }
-        else 
+        else
         {
             shippingCost = 35;
         }
+
         return shippingCost;
     }
 

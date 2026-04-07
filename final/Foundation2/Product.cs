@@ -1,27 +1,61 @@
 using System;
 
-public class Product
+public class Order
 {
-    private string _name {get; set;}
-    private string _id {get; set;}
-    private  double _price {get; set;}
-    private int _quantity {get; set;}
+    public List<Product> _products = new List<Product>();
+    public Customer _customer;
 
-    public Product (string name, string id, double price, int quantity)
+    public Order(Customer customer)
     {
-        _name = name;
-        _id = id;
-        _price = price;
-        _quantity = quantity;
+        _customer = customer;
     }
 
-    public double CalculatePrice()
+    public void AddProduct(Product product)
     {
-        return Math.Round((_price * _quantity),2);
+        _products.Add(product);
     }
 
-    public void DisplayProductDetails()
+    public double CalculateSubtotal()
     {
-        Console.WriteLine($"{_name} ({_id}) => Total: ${CalculatePrice()}");
+        double subtotal = 0;
+
+        foreach (Product product in _products)
+        {
+            double productPrice = product.CalculatePrice();
+            subtotal += productPrice;
+        }
+
+        subtotal = Math.Round(subtotal, 2);
+        return subtotal;
+    }
+
+    public double CalculateTotal()
+    {
+        double total = Math.Round((CalculateSubtotal() + _customer.GetShippingCost()), 2);
+        return total;
+    }
+
+    public void DisplayCosts(double subtotal, double shippingCost, double totalCost)
+    {
+        Console.WriteLine($"Subtotal: ${subtotal}");
+        Console.WriteLine($"Shipping: ${shippingCost}");
+        Console.WriteLine($"Total: ${totalCost}");
+    }
+
+    public void DisplayPackingLabel()
+    {
+        Console.WriteLine("Packing Label");
+
+        foreach (Product product in _products)
+        {
+            product.DisplayProductDetails();
+        }
+    }
+
+    public void DisplayShippingLabel()
+    {
+        Console.WriteLine("Shipping Label");
+        Console.WriteLine("SHIP TO: ");
+        _customer.DisplayCustomer();
     }
 }
